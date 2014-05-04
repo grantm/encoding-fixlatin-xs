@@ -14,7 +14,7 @@ encoding_fixlatin_xs(source)
         if(0) {
             XSRETURN_UNDEF;
         }
-    CODE:
-        RETVAL = newSVpv("RESULT",0);
-    OUTPUT:
-        RETVAL
+    PPCODE:
+        ST(0) = newSVpv("RESULT",0);
+        sv_2mortal(ST(0));
+        XSRETURN(1);
