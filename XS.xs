@@ -5,10 +5,16 @@
 
 MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
-int
-is_even(input)
-        int input
+SV *
+encoding_fixlatin_xs(source)
+        SV * source
+    INIT:
+        STRLEN l;
+        printf("source = '%s'\n", SvPV(source, l));
+        if(0) {
+            XSRETURN_UNDEF;
+        }
     CODE:
-        RETVAL = (input % 2 == 0);
+        RETVAL = newSVpv("RESULT",0);
     OUTPUT:
         RETVAL
