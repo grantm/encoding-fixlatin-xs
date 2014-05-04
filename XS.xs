@@ -3,7 +3,7 @@
 #include "XSUB.h"
 
 
-MODULE = Encoding::FixLatin::XS		PACKAGE = Encoding::FixLatin::XS		
+MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
 int
 is_even(input)
