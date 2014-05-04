@@ -5,8 +5,14 @@
 
 SV* _encoding_fix_latin_xs(SV* source) {
     SV* out = NULL;  // Defer initialisation until first non-ASCII character
+    U8 *ph;
+
     STRLEN l;
-    printf("source = '%s'\n", SvPV(source, l));
+    ph = SvPV(source, l);
+
+    if(strlen(ph) % 2) {
+        return(source);
+    }
 
     out = newSVpv("RESULT",0);
     sv_2mortal(out);
