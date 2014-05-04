@@ -5,17 +5,24 @@
 
 SV* _encoding_fix_latin_xs(SV* source) {
     SV* out = NULL;  // Defer initialisation until first non-ASCII character
-    U8 *ph;
+    U8 *ph, *pt;
+    UV i, bytes;
 
     STRLEN l;
-    ph = SvPV(source, l);
+    ph = pt = SvPV(source, l);
+    bytes = SvCUR(source);
+    for(i = 0; i < bytes; i++, ph++) {
+        if((*ph & 0x80) == 0)
+            continue;
 
-    if(strlen(ph) % 2) {
-        return(source);
+        out = newSVpv("NOT ASCII",0);
+        return(sv_2mortal(out));
     }
 
-    out = newSVpv("RESULT",0);
-    sv_2mortal(out);
+    // If the input was all ASCII, just return the input
+    if(out == NULL) {
+        return(source);
+    }
 
     return out;
 }
