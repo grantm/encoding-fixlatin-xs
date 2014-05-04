@@ -3,18 +3,23 @@
 #include "XSUB.h"
 
 
+SV* _encoding_fix_latin_xs(SV* source) {
+    SV* out = NULL;  // Defer initialisation until first non-ASCII character
+    STRLEN l;
+    printf("source = '%s'\n", SvPV(source, l));
+
+    out = newSVpv("RESULT",0);
+    sv_2mortal(out);
+
+    return out;
+}
+
+
 MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
 SV *
 encoding_fixlatin_xs(source)
         SV * source
-    INIT:
-        STRLEN l;
-        printf("source = '%s'\n", SvPV(source, l));
-        if(0) {
-            XSRETURN_UNDEF;
-        }
     PPCODE:
-        ST(0) = newSVpv("RESULT",0);
-        sv_2mortal(ST(0));
+        ST(0) = _encoding_fix_latin_xs(source);
         XSRETURN(1);
