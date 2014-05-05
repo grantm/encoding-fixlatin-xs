@@ -36,5 +36,23 @@ is(
     "plain ASCII input with embedded null byte returned unchanged"
 );
 
+is(
+    fx("M\xC4\x81ori"),
+    "M\x{101}ori",
+    "UTF-8 bytes passed through"
+);
+
+is(
+    fx("Caf\xE9"),
+    "Caf\x{E9}",
+    "latin byte transcoded to UTF-8"
+);
+
+is(
+    fx("Caf\xE9 Rom\xC4\x81 (\xE2\x82\xAC9.99)"),
+    "Caf\x{E9} Rom\x{101} (\x{20AC}9.99)",
+    "mixed latin and UTF-8 translated to UTF-8"
+);
+
 done_testing;
 
