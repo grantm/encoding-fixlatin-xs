@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 
 U8 _encoding_fix_latin_ms_map[] = {

@@ -1,6 +1,7 @@
 Changes
 Makefile.PL
 MANIFEST
+ppport.h
 README
 XS.xs
 t/Encoding-FixLatin-XS.t
