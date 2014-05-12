@@ -40,7 +40,12 @@ U8 _encoding_fix_latin_ms_map[] = {
 };
 
 
-SV* _encoding_fix_latin_xs(SV* source) {
+static SV* _encoding_fix_latin_xs(SV*);
+static int consume_utf8_bytes(U8*, U8*);
+static int consume_latin_byte(U8*, U8*);
+
+
+static SV* _encoding_fix_latin_xs(SV* source) {
     SV* out = NULL;  // Defer initialisation until first non-ASCII character
     U8 *ph, *pt;
     U8 ubuf[8];
@@ -64,9 +69,9 @@ SV* _encoding_fix_latin_xs(SV* source) {
             sv_catpvn(out, pt, (STRLEN)(ph - pt));
         }
 
-        bytes_consumed = _encoding_fix_latin_consume_utf8_bytes(ph, ubuf);
+        bytes_consumed = consume_utf8_bytes(ph, ubuf);
         if(!bytes_consumed) {
-            bytes_consumed = _encoding_fix_latin_consume_latin_byte(ph, ubuf);
+            bytes_consumed = consume_latin_byte(ph, ubuf);
         }
         sv_catpvn(out, ubuf, strnlen(ubuf, 8));
         i  += bytes_consumed - 1;
@@ -89,7 +94,7 @@ SV* _encoding_fix_latin_xs(SV* source) {
     return(sv_2mortal(out));
 }
 
-int _encoding_fix_latin_consume_utf8_bytes(U8* in, U8* out) {
+static int consume_utf8_bytes(U8* in, U8* out) {
     UV  cp, bytes, i;
     U8 *d;
 
@@ -127,7 +132,7 @@ int _encoding_fix_latin_consume_utf8_bytes(U8* in, U8* out) {
 }
 
 
-int _encoding_fix_latin_consume_latin_byte(U8* in, U8* out) {
+static int consume_latin_byte(U8* in, U8* out) {
     U8 *d;
 
     if(in[0] > 0x9F) {
