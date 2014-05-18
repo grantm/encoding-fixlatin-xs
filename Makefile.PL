@@ -5,7 +5,9 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'Encoding::FixLatin::XS',
     VERSION_FROM      => 'lib/Encoding/FixLatin/XS.pm', # finds $VERSION
-    PREREQ_PM         => {}, # e.g., Module::Name => 1.1
+    PREREQ_PM         => {
+                            'Encoding::FixLatin'  => 1.03
+                         },
     ABSTRACT_FROM     => 'lib/Encoding/FixLatin/XS.pm', # retrieve abstract from module
     AUTHOR            => 'Grant McLean <grantm@cpan.org>',
     LIBS              => [''], # e.g., '-lm'
