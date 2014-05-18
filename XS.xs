@@ -41,12 +41,12 @@ U8 _encoding_fix_latin_ms_map[] = {
 };
 
 
-static SV* _encoding_fix_latin_xs(SV*);
-static int consume_utf8_bytes(U8*, U8*);
+static SV* _encoding_fix_latin_xs(SV*, int);
+static int consume_utf8_bytes(U8*, U8*, int);
 static int consume_latin_byte(U8*, U8*);
 
 
-static SV* _encoding_fix_latin_xs(SV* source) {
+static SV* _encoding_fix_latin_xs(SV* source, int overlong_fatal) {
     SV* out = NULL;  // Defer initialisation until first non-ASCII character
     U8 *ph, *pt;
     U8 ubuf[8];
@@ -70,7 +70,7 @@ static SV* _encoding_fix_latin_xs(SV* source) {
             sv_catpvn(out, pt, (STRLEN)(ph - pt));
         }
 
-        bytes_consumed = consume_utf8_bytes(ph, ubuf);
+        bytes_consumed = consume_utf8_bytes(ph, ubuf, overlong_fatal);
         if(!bytes_consumed) {
             bytes_consumed = consume_latin_byte(ph, ubuf);
         }
@@ -95,25 +95,30 @@ static SV* _encoding_fix_latin_xs(SV* source) {
     return(sv_2mortal(out));
 }
 
-static int consume_utf8_bytes(U8* in, U8* out) {
-    UV  cp, bytes, i;
-    U8 *d;
+static int consume_utf8_bytes(U8* in, U8* out, int overlong_fatal) {
+    UV  cp, min_cp, bytes, i;
+    U8 *d, ebuf[8];
+    SV *exception;
 
     if((in[0] & 0b11100000) == 0b11000000) {
         cp = in[0] & 0b00011111;
         bytes = 2;
+        min_cp = 0x80;
     }
     else if((in[0] & 0b11110000) == 0b11100000) {
         cp = in[0] & 0b00001111;
         bytes = 3;
+        min_cp = 0x800;
     }
     else if((in[0] & 0b11111000) == 0b11110000) {
         cp = in[0] & 0b00000111;
         bytes = 4;
+        min_cp = 0x10000;
     }
     else if((in[0] & 0b11111100) == 0b11111000) {
         cp = in[0] & 0b00000011;
         bytes = 5;
+        min_cp = 0x200000;
     }
     else {
         return(0);
@@ -127,6 +132,16 @@ static int consume_utf8_bytes(U8* in, U8* out) {
         cp += in[i] & 0b00111111;
     }
 
+    if(overlong_fatal && cp < min_cp) {
+        exception = newSV(48);
+        SvPOK_on(exception);
+        sv_catpv(exception, "Over-long UTF-8 byte sequence:");
+        for(i = 0; i < bytes; i++) {
+            sprintf(ebuf, " %02X", (int)in[i]);
+            sv_catpv(exception, ebuf);
+        }
+        croak_sv(exception);
+    }
     d = uvchr_to_utf8(out, cp);
     *d = '\0';
     return(bytes);
@@ -150,8 +165,9 @@ static int consume_latin_byte(U8* in, U8* out) {
 MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
 SV *
-_fix_latin_xs(source)
-        SV * source
+_fix_latin_xs(source, overlong_fatal)
+        SV *  source
+        int   overlong_fatal
     PPCODE:
-        ST(0) = _encoding_fix_latin_xs(source);
+        ST(0) = _encoding_fix_latin_xs(source, overlong_fatal);
         XSRETURN(1);

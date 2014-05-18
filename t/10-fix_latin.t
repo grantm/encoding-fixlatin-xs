@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 25;
+use Test::More;
 
 BEGIN {
     use_ok( 'Encoding::FixLatin', 'fix_latin' );
@@ -67,4 +67,8 @@ is(fix_latin("\x81", ascii_hex => 0) => "\x{81}",
 is(fix_latin("\x81\x8D\x8F\x90\x9D", ascii_hex => 0)
     => "\x{81}\x{8D}\x{8F}\x{90}\x{9D}",
     'All undefined (CP1252) bytes treated as ctrl chars on request');
+
+
+done_testing;
+exit;
 

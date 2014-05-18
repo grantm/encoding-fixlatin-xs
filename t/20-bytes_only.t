@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 12;
+use Test::More;
 
 BEGIN {
     use_ok( 'Encoding::FixLatin', 'fix_latin' );
@@ -38,4 +38,7 @@ is(fix_latin("\xF0\x80\x80\xAB", bytes_only => 1) => "+",
 
 is(fix_latin("\xF8\x80\x80\x80\xAB", bytes_only => 1) => "+",
     '5 byte over-long UTF-8 string shortened to 1 byte');
+
+done_testing;
+exit;
 
