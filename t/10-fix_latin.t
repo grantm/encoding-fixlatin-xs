@@ -2,9 +2,8 @@
 
 use Test::More;
 
-BEGIN {
-    use_ok( 'Encoding::FixLatin', 'fix_latin' );
-}
+use Encoding::FixLatin qw(fix_latin);
+use Encoding::FixLatin::XS;
 
 ok(__PACKAGE__->can('fix_latin'), 'fix_latin() function was imported on demand');
 

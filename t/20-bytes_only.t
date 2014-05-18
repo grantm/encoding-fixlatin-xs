@@ -2,9 +2,8 @@
 
 use Test::More;
 
-BEGIN {
-    use_ok( 'Encoding::FixLatin', 'fix_latin' );
-}
+use Encoding::FixLatin qw(fix_latin);
+use Encoding::FixLatin::XS;
 
 is(length(fix_latin("a b")), 3,
     "string length for simple ascii input looks OK");
