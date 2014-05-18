@@ -10,13 +10,13 @@ use Test::More;
 use Encoding::FixLatin::XS;
 
 ok(
-    UNIVERSAL::can('Encoding::FixLatin::XS','encoding_fixlatin_xs'),
+    UNIVERSAL::can('Encoding::FixLatin::XS','_fix_latin_xs'),
     'expected XS sub is available'
 );
 
 # Alias XS sub name to something shorter for test purposes
 
-*fx = \&Encoding::FixLatin::XS::encoding_fixlatin_xs;
+*fx = \&Encoding::FixLatin::XS::_fix_latin_xs;
 
 is(
     fx("Plain ASCII"),

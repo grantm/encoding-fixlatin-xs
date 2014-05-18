@@ -150,7 +150,7 @@ static int consume_latin_byte(U8* in, U8* out) {
 MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
 SV *
-encoding_fixlatin_xs(source)
+_fix_latin_xs(source)
         SV * source
     PPCODE:
         ST(0) = _encoding_fix_latin_xs(source);
