@@ -41,12 +41,12 @@ U8 _encoding_fix_latin_ms_map[] = {
 };
 
 
-static SV* _encoding_fix_latin_xs(SV*, int);
+static SV* _encoding_fix_latin_xs(SV*, int, int);
 static int consume_utf8_bytes(U8*, U8*, int);
-static int consume_latin_byte(U8*, U8*);
+static int consume_latin_byte(U8*, U8*, int);
 
 
-static SV* _encoding_fix_latin_xs(SV* source, int overlong_fatal) {
+static SV* _encoding_fix_latin_xs(SV* source, int overlong_fatal, int ascii_hex) {
     SV* out = NULL;  // Defer initialisation until first non-ASCII character
     U8 *ph, *pt;
     U8 ubuf[8];
@@ -72,7 +72,7 @@ static SV* _encoding_fix_latin_xs(SV* source, int overlong_fatal) {
 
         bytes_consumed = consume_utf8_bytes(ph, ubuf, overlong_fatal);
         if(!bytes_consumed) {
-            bytes_consumed = consume_latin_byte(ph, ubuf);
+            bytes_consumed = consume_latin_byte(ph, ubuf, ascii_hex);
         }
         sv_catpvn(out, ubuf, strnlen(ubuf, 8));
         i  += bytes_consumed - 1;
@@ -148,15 +148,22 @@ static int consume_utf8_bytes(U8* in, U8* out, int overlong_fatal) {
 }
 
 
-static int consume_latin_byte(U8* in, U8* out) {
-    U8 *d;
+static int consume_latin_byte(U8* in, U8* out, int ascii_hex) {
+    U8 *d, *utf_bytes;
 
     if(in[0] > 0x9F) {
         d = uvchr_to_utf8(out, (UV)in[0]);
         *d = '\0';
     }
     else {
-        strncpy(out, _encoding_fix_latin_ms_map + (in[0] & 0x7F) * 4, 4);
+        utf_bytes = _encoding_fix_latin_ms_map + (in[0] & 0x7F) * 4;
+        if(ascii_hex == 0 && *utf_bytes == '%') {
+            d = uvchr_to_utf8(out, (UV)in[0]);
+            *d = '\0';
+        }
+        else {
+            strncpy(out, utf_bytes, 4);
+        }
     }
     return(1);
 }
@@ -165,9 +172,10 @@ static int consume_latin_byte(U8* in, U8* out) {
 MODULE = Encoding::FixLatin::XS   PACKAGE = Encoding::FixLatin::XS
 
 SV *
-_fix_latin_xs(source, overlong_fatal)
+_fix_latin_xs(source, overlong_fatal, ascii_hex)
         SV *  source
         int   overlong_fatal
+        int   ascii_hex
     PPCODE:
-        ST(0) = _encoding_fix_latin_xs(source, overlong_fatal);
+        ST(0) = _encoding_fix_latin_xs(source, overlong_fatal, ascii_hex);
         XSRETURN(1);
