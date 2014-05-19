@@ -13,3 +13,4 @@ XS.bs
 XS.c
 XS.o
 ^MYMETA
+^Encoding-FixLatin-XS-
