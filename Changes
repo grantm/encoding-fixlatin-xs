@@ -1,6 +1,6 @@
-Revision history for Perl extension Encoding::FixLatin::XS.
+Revision history for Perl extension {{$dist->name}}
 
-0.90  Sat May 20 20:35:55 2014
+{{$NEXT}}
     - initial release to CPAN
 
 0.01  Sat May  3 17:17:00 2014
