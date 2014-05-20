@@ -1,7 +1,10 @@
-use 5.010000;
+use 5.014000;       # May work with older Perls - try it and let me know :-)
+
+use strict;
+use warnings;
+
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
+
 WriteMakefile(
     NAME              => 'Encoding::FixLatin::XS',
     VERSION_FROM      => 'lib/Encoding/FixLatin/XS.pm', # finds $VERSION
