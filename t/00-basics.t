@@ -7,6 +7,10 @@ use Test::More;
 
 use Encoding::FixLatin::XS;
 
+ok(1, "Successfully loaded Encoding::FixLatin::XS via 'use'");
+
+diag( "Testing Encoding::FixLatin::XS $Encoding::FixLatin::XS::VERSION, Perl $], $^X" );
+
 ok(
     UNIVERSAL::can('Encoding::FixLatin::XS','_fix_latin_xs'),
     'expected XS sub is available'
