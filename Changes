@@ -1,6 +1,9 @@
 Revision history for Perl extension Encoding::FixLatin::XS.
 
+0.90  Sat May 20 20:35:55 2014
+    - initial release to CPAN
+
 0.01  Sat May  3 17:17:00 2014
-	- original version; created by h2xs 1.23 with options
-		-A -b 5.10.0 --use-new-tests --skip-exporter --skip-ppport -n Encoding::FixLatin::XS
+    - original version; created by h2xs 1.23 with options
+        -A -b 5.10.0 --use-new-tests --skip-exporter -n Encoding::FixLatin::XS
 
