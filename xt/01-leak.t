@@ -2,7 +2,6 @@
 #
 # 'Borrowed' from DMAKI's File-MMagic-XS
 
-use 5.014;
 use strict;
 use warnings;
 

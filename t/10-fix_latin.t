@@ -1,5 +1,8 @@
 #!perl -T
 
+use strict;
+use warnings;
+
 use Test::More;
 
 use Encoding::FixLatin qw(fix_latin);
