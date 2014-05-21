@@ -1,6 +1,8 @@
 Revision history for Perl extension {{$dist->name}}
 
 {{$NEXT}}
+
+0.90      2014-05-21 22:25:46 Pacific/Auckland
     - initial release to CPAN
 
 0.01  Sat May  3 17:17:00 2014
