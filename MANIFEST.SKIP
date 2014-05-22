@@ -14,3 +14,4 @@ XS.c
 XS.o
 ^MYMETA
 ^Encoding-FixLatin-XS-
+^test-data
