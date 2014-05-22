@@ -20,7 +20,7 @@ Encoding::FixLatin::XS - XS implementation layer for Encoding::FixLatin
 
 =head1 SYNOPSIS
 
-  use Encoding::FixLatin  qw(fix_latin);
+  use Encoding::FixLatin  qw(fix_latin);    # will load XS module if available
 
   my $utf8_string = fix_latin($mixed_encoding_string);
 
