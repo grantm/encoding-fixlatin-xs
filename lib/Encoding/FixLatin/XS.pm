@@ -6,10 +6,8 @@ use warnings;
 
 our @ISA = qw();
 
-our $VERSION = '0.90';
-
 require XSLoader;
-XSLoader::load('Encoding::FixLatin::XS', $VERSION);
+XSLoader::load('Encoding::FixLatin::XS', $Encoding::FixLatin::XS::VERSION);
 
 # Preloaded methods go here.
 
