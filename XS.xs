@@ -100,23 +100,23 @@ static int consume_utf8_bytes(U8* in, U8* out, int overlong_fatal) {
     U8 *d, ebuf[8];
     SV *exception;
 
-    if((in[0] & 0b11100000) == 0b11000000) {
-        cp = in[0] & 0b00011111;
+    if((in[0] & 0xE0) == 0xC0) {
+        cp = in[0] & 0x1F;
         bytes = 2;
         min_cp = 0x80;
     }
-    else if((in[0] & 0b11110000) == 0b11100000) {
-        cp = in[0] & 0b00001111;
+    else if((in[0] & 0xF0) == 0xE0) {
+        cp = in[0] & 0x0F;
         bytes = 3;
         min_cp = 0x800;
     }
-    else if((in[0] & 0b11111000) == 0b11110000) {
-        cp = in[0] & 0b00000111;
+    else if((in[0] & 0xF8) == 0xF0) {
+        cp = in[0] & 0x07;
         bytes = 4;
         min_cp = 0x10000;
     }
-    else if((in[0] & 0b11111100) == 0b11111000) {
-        cp = in[0] & 0b00000011;
+    else if((in[0] & 0xFC) == 0xF8) {
+        cp = in[0] & 0x03;
         bytes = 5;
         min_cp = 0x200000;
     }
@@ -125,11 +125,11 @@ static int consume_utf8_bytes(U8* in, U8* out, int overlong_fatal) {
     }
 
     for(i = 1; i < bytes; i++) {
-        if((in[i] & 0b11000000) != 0b10000000) {
+        if((in[i] & 0xC0) != 0x80) {
             return(0);
         }
         cp <<= 6;
-        cp += in[i] & 0b00111111;
+        cp += in[i] & 0x3F;
     }
 
     if(overlong_fatal && cp < min_cp) {
