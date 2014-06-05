@@ -2,6 +2,10 @@ Revision history for Perl extension {{$dist->name}}
 
 {{$NEXT}}
 
+1.01      2014-06-05 17:30:06 Pacific/Auckland
+    - replace strnlen with strlen for improved portability (with thanks to
+      Chris Williams for assistance in identifying the problem)
+
 1.00      2014-05-22 19:31:29 Pacific/Auckland
     - replace gcc-specific 0b........ with more portable 0x..
 
