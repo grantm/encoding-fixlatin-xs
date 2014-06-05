@@ -1,3 +1,26 @@
+/*
+ * Notes for the casual reader ...
+ *
+ * This is my first attempt at writing an XS module so it's probably not the
+ * finest example for a new XS coder to read.  Of course if you do read it and
+ * have suggestions for improvements then please let me know.
+ *
+ * Unlike some XS modules, this one is not wrapping an existing library.  All
+ * the C source is contained in this file, along with the XSUB definition.
+ *
+ * Although the XSUB layer allows automatic conversion between the data
+ * structures used by Perl variables (different types of SV) and native C types
+ * (like ints and character pointers) this module doesn't really take advantage
+ * of that.  Instead, it takes an SV as input and returns an SV as output.
+ * This design decision was made in order to support the (premature/micro)
+ * optimisation whereby if the input SV contained all-ASCII characters, then
+ * the return value would be a pointer to the same SV, rather than needlessly
+ * making a copy of it.
+ *
+ * Copyright (C) 2014 by Grant McLean <grantm@cpan.org>
+ *
+ */
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
