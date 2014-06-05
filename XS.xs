@@ -74,7 +74,7 @@ static SV* _encoding_fix_latin_xs(SV* source, int overlong_fatal, int ascii_hex)
         if(!bytes_consumed) {
             bytes_consumed = consume_latin_byte(ph, ubuf, ascii_hex);
         }
-        sv_catpvn(out, ubuf, strnlen(ubuf, 8));
+        sv_catpvn(out, ubuf, strlen(ubuf));
         i  += bytes_consumed - 1;
         ph += bytes_consumed - 1;
 
